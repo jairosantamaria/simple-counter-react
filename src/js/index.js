@@ -1,5 +1,5 @@
 //import react into the bundle
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { ClockFill } from "react-bootstrap-icons";
 import PropTypes from "prop-types";
@@ -15,20 +15,7 @@ import "../styles/index.scss";
 //import your own components
 import { Home } from "./component/home.js";
 
-const state = {
-	seconds: 0
-};
-let i = 0,
-	b = 0;
-
-setInterval(function() {
-	this.state = {
-		seconds: i++
-	};
-	b = this.state.seconds;
-
-	console.log(this.state.seconds, b);
-}, 1000);
+//const [seconds, SetSeconds] = useState(0);
 
 export function SecondsCounter(props) {
 	return (
@@ -41,16 +28,27 @@ export function SecondsCounter(props) {
 				<div className="clockNumber">0</div>
 				<div className="clockNumber">0</div>
 				<div className="clockNumber">0</div>
-				<div className="clockNumber">0</div>
-				<div className="clockNumber">0</div>
+				<div className="clockNumber">{props.digitTwo % 10}</div>
+				<div className="clockNumber">{props.digitOne % 10}</div>
 			</div>
 		</div>
 	);
 }
 
 SecondsCounter.propTypes = {
-	seconds: PropTypes.Number
+	digitOne: PropTypes.string,
+	digitTwo: PropTypes.string
 };
 
+let counter = 0;
+
 //render your react application
-ReactDOM.render(<SecondsCounter seconds={0} />, document.querySelector("#app"));
+setInterval(function() {
+	let primerDigito = Math.floor(counter / 1);
+	let segundoDigito = Math.floor(counter / 10);
+	counter++;
+	ReactDOM.render(
+		<SecondsCounter digitOne={primerDigito} digitTwo={segundoDigito} />,
+		document.querySelector("#app")
+	);
+}, 1000);
